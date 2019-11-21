@@ -122,7 +122,7 @@ console.log(foomap);
 	bg: {...},
 	canvas: {...},
 	config: {
-		opacity: 0.5,
+		opacity: 0.5, //This has the default opacity value!
 		...
 	}
 	...
