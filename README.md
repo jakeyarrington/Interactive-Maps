@@ -143,19 +143,19 @@ console.log(bar);
 
 // Outputs
 {
-top: 10,
-left: 10,
-$data: {
-	id: 1,
-	name: "Bar",
-	map_ID: 100,
-	posx: "10",
-	posy: "10",
-	width: "100",
-	height: "100",
-	waffles: true, //This marker does have waffles.
+	top: 10,
+	left: 10,
+	$data: {
+		id: 1,
+		name: "Bar",
+		map_ID: 100,
+		posx: "10",
+		posy: "10",
+		width: "100",
+		height: "100",
+		waffles: true, //This marker does have waffles.
+		...
+	}
 	...
-}
-...
 }
 ```
