@@ -24,59 +24,59 @@ This plugin allows you to quickly and easily create interactive maps from a sing
 Using the embed shortcode you can drop a map into any post or page.
 
 ```html
-	/* Change ID to match the ID of your interactive map. */
-	[yimap width="500" height="500" id="1234"]
+/* Change ID to match the ID of your interactive map. */
+[yimap width="500" height="500" id="1234"]
 ```
 
 ## Extend Frontend
 
 ### Access the Map object in the frontend
 ```javascript
-	// We are going to access the map created in the Getting Started section that we named Foo.
-	var foomap = YIM.map("foo");
+// We are going to access the map created in the Getting Started section that we named Foo.
+var foomap = YIM.map("foo");
 
-	// If your map name was "Super Cool Interactive Map", you can call the map as follows:
-	var custom_map = YIM.map("super-cool-interactive-map");
+// If your map name was "Super Cool Interactive Map", you can call the map as follows:
+var custom_map = YIM.map("super-cool-interactive-map");
 ````
 
 ### Access a single Marker
 ```javascript	
-	var foomap = YIM.map("foo");
+var foomap = YIM.map("foo");
 
-	// We're going to access the "Bar" marker as in the Getting Started section.
-	var bar = foomap.marker("bar");
+// We're going to access the "Bar" marker as in the Getting Started section.
+var bar = foomap.marker("bar");
 
-	// If you want to return all marker, simply call the same function without passing an arguemtn.
-	var all_markers = foomap.marker();
+// If you want to return all marker, simply call the same function without passing an arguemtn.
+var all_markers = foomap.marker();
 ```
 
 ### Add Event Handler to Marker
 You can see all available event handlers on the [Fabric.js website](https://github.com/fabricjs/fabric.js/wiki/Working-with-events).
 
 ```javascript
-	var foomap = YIM.map("foo");
-	var bar = foomap.marker("bar");
-	
-	bar.on("mousedown", function(e) {
-		alert("You clicked on BAR!");
-	});
+var foomap = YIM.map("foo");
+var bar = foomap.marker("bar");
+
+bar.on("mousedown", function(e) {
+	alert("You clicked on BAR!");
+});
 ```
 
 ### Modify a Marker
 The `marker` function available in this plugin returns a Fabric.js rectangle object and you can modify this as you would if you were modifying a typical Fabric.js shape.
 
 ```javascript
-	var foomap = YIM.map("foo");
-	var bar = foomap.marker("bar");
+var foomap = YIM.map("foo");
+var bar = foomap.marker("bar");
+
+bar.set('width', 500');
+bar.set({
+	height: 500,
+	fill: '#f00'
+});
 	
-	bar.set('width', 500');
-	bar.set({
-		height: 500,
-		fill: '#f00'
-	});
-		
-	// Force Fabric.js to render the canvas and update the marker.
-	foomap.canvas.renderAll();
+// Force Fabric.js to render the canvas and update the marker.
+foomap.canvas.renderAll();
 ```
 
 ## Extend Backend
@@ -85,37 +85,37 @@ The `marker` function available in this plugin returns a Fabric.js rectangle obj
 Fields use ACF pro, you can read more about the field types on the [ACF website](https://www.advancedcustomfields.com/resources/). Let's go ahead and add a custom field which will allow us to add custom information in the backend.
 
 ```php
-	add_filter('yim/import/fields', 'add_new_yim_fields');
-	
-	function add_new_yim_fields($fields) {
-		$fields[] = array(
-			"key" => "field_map_opacity",
-			"label" => "Opacity",
-			"type" => "number",
-			"instructions" => "Set the opacity of the map",
-			"required" => 0,
-			"default_value" => ""
-		);
-	}
+add_filter('yim/import/fields', 'add_new_yim_fields');
+
+function add_new_yim_fields($fields) {
+	$fields[] = array(
+		"key" => "field_map_opacity",
+		"label" => "Opacity",
+		"type" => "number",
+		"instructions" => "Set the opacity of the map",
+		"required" => 0,
+		"default_value" => ""
+	);
+}
 ```
 
 ### Add Fields to Markers
 Just like above, we can add custom fields to markers.
 ```php
-	add_filter('yim/import/field/markers', 'add_waffles_to_markers');
+add_filter('yim/import/field/markers', 'add_waffles_to_markers');
+
+function add_waffles_to_markers($fields) {
+	$fields[] = array(
+		"key" => "field_marker_has_waffles",
+		"label" => "Has Waffles?",
+		"type" => "yes_no",
+		"instructions" => "Does this marker have waffles?",
+		"required" => 0,
+		"default_value" => ""
+	);
 	
-	function add_waffles_to_markers($fields) {
-		$fields[] = array(
-			"key" => "field_marker_has_waffles",
-			"label" => "Has Waffles?",
-			"type" => "yes_no",
-			"instructions" => "Does this marker have waffles?",
-			"required" => 0,
-			"default_value" => ""
-		);
-		
-		return $fields;
-	}
+	return $fields;
+}
 ```
 
 
@@ -123,39 +123,39 @@ Just like above, we can add custom fields to markers.
 We can directly modify the marker on creation, here were going to add an attribute to check if the marker contains waffles.
 
 ```php
-	// We're in the themes functions.php file.
+// We're in the themes functions.php file.
+
+add_filter('yim/create/marker', 'add_waffles_to_marker');
+
+function add_waffles_to_marker($marker) {
+	$marker['waffles'] = true;
 	
-	add_filter('yim/create/marker', 'add_waffles_to_marker');
-	
-	function add_waffles_to_marker($marker) {
-		$marker['waffles'] = true;
-		
-		return $marker;
-	}
+	return $marker;
+}
 ```
 
 Let's have a look at how this looks on the frontend.
 
 ```javascript
-	var foomap = YIM.map("foo");
-	var bar = foomap.marker("bar");
-	console.log(bar);
-	
-	// Outputs
-	{
-		$data: {
-			id: 1,
-			name: "Bar",
-			map_ID: 100,
-			posx: "10",
-			posy: "10",
-			width: "100",
-			height: "100",
-			waffles: true, //This marker does have waffles.
-			...
-		}
-		top: 10,
-		left: 10,
+var foomap = YIM.map("foo");
+var bar = foomap.marker("bar");
+console.log(bar);
+
+// Outputs
+{
+	$data: {
+		id: 1,
+		name: "Bar",
+		map_ID: 100,
+		posx: "10",
+		posy: "10",
+		width: "100",
+		height: "100",
+		waffles: true, //This marker does have waffles.
 		...
 	}
+	top: 10,
+	left: 10,
+	...
+}
 ```
