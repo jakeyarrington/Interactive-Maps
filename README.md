@@ -103,14 +103,13 @@ function add_new_yim_fields($fields) {
 We can then add this field to the map object.
 
 ```php
+add_filter('yim/create/map', 'add_opacity_to_map');
 
-	add_filter('yim/create/map', 'add_opacity_to_map');
+function add_opacity_to_map($map) {
+	$map['opacity'] = intval(get_post_meta($map['ID'], 'opacity')) / 100;
 
-	function add_opacity_to_map($map) {
-		$map['opacity'] = intval(get_post_meta($map['ID'], 'opacity')) / 100;
-
-		return $map;
-	}
+	return $map;
+}
 ```
 
 Let's have a look at how this look on the frontend.
