@@ -69,7 +69,7 @@ The `marker` function available in this plugin returns a Fabric.js rectangle obj
 var foomap = YIM.map("foo");
 var bar = foomap.marker("bar");
 
-bar.set('width', 500');
+bar.set('width', '500');
 bar.set({
 	height: 500,
 	fill: '#f00'
