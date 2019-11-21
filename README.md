@@ -135,7 +135,7 @@ Just like above, we can add custom fields to markers.
 add_filter('yim/import/field/markers', 'add_waffles_to_markers');
 
 function add_waffles_to_markers($fields) {
-	$fields[] = array(
+	$fields['sub_fields'][] = array(
 		"key" => "field_marker_has_waffles",
 		"name" =>  "has_waffles",
 		"label" => "Has Waffles?",
