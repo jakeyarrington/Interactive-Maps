@@ -90,14 +90,45 @@ add_filter('yim/import/fields', 'add_new_yim_fields');
 function add_new_yim_fields($fields) {
 	$fields[] = array(
 		"key" => "field_map_opacity",
+		"name" =>  "opacity",
 		"label" => "Opacity",
 		"type" => "number",
 		"instructions" => "Set the opacity of the map",
 		"required" => 0,
-		"default_value" => ""
+		"default_value" => 50
 	);
 }
 ```
+
+We can then add this field to the map object.
+
+```php
+
+	add_filter('yim/create/map', 'add_opacity_to_map');
+
+	function add_opacity_to_map($map) {
+		$map['opacity'] = intval(get_post_meta($map['ID'], 'opacity')) / 100;
+
+		return $map;
+	}
+```
+
+Let's have a look at how this look on the frontend.
+```javascript
+var foomap = YIM.map("foo");
+console.log(foomap);
+
+// Outputs
+{
+	bg: {...},
+	canvas: {...},
+	config: {
+		opacity: 0.5,
+		...
+	}
+	...
+}
+````
 
 ### Add Fields to Markers
 Just like above, we can add custom fields to markers.
@@ -107,6 +138,7 @@ add_filter('yim/import/field/markers', 'add_waffles_to_markers');
 function add_waffles_to_markers($fields) {
 	$fields[] = array(
 		"key" => "field_marker_has_waffles",
+		"name" =>  "has_waffles",
 		"label" => "Has Waffles?",
 		"type" => "yes_no",
 		"instructions" => "Does this marker have waffles?",
